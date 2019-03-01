@@ -1,4 +1,4 @@
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 # More informations:
 # http://docs.grafana.org/installation/configuration
 # https://github.com/grafana/grafana/blob/master/conf/sample.ini
@@ -96,10 +96,16 @@ enabled = true
 path = {{ grafana_data_dir }}/dashboards
 
 # Alerting
-{% if grafana_alerting %}
 [alerting]
-enabled = True
-;execute_alerts = true
+{% if grafana_alerting != {} %}
+enabled = true
+{%   for k,v in grafana_alerting.items() %}
+{%     if k != 'enabled' %}
+{{ k }} = {{ v }}
+{%     endif %}
+{%   endfor %}
+{% else %}
+enabled = false
 {% endif %}
 
 # SMTP and email config

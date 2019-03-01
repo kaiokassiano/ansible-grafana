@@ -2,4 +2,11 @@
 - name: Prepare
   hosts: all
   gather_facts: false
-  tasks: []
+  tasks:
+    - name: Install rsync for grafana dashboard provisioning
+      package:
+        name: ["rsync"]
+      register: task_result
+      until: task_result is success
+      retries: 10
+      delay: 2

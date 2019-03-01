@@ -30,7 +30,7 @@ def test_directories(host):
 
 def test_service(host):
     s = host.service("grafana-server")
-    assert s.is_enabled
+    # assert s.is_enabled
     assert s.is_running
 
 
@@ -42,3 +42,9 @@ def test_packages(host):
 
 def test_socket(host):
     assert host.socket("tcp://127.0.0.1:3000").is_listening
+
+
+def test_alternative_yum_repo(host):
+    if host.system_info.distribution in ['centos', 'redhat', 'fedora']:
+        f = host.file("/etc/yum.repos.d/alternative.grafana.yum.repo")
+        assert f.exists
